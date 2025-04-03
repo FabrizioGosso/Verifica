@@ -1,17 +1,21 @@
-#include <iostream>
-#include "saluto.h"
-
-void salutaUtente(const std::string& nome) {
-    std::cout << "Ciao, " << nome << "! Benvenuto nel mondo di C++!" << std::endl;
-}
+#include "player.h"
 
 int main() {
-    std::string nome;
-    
-    std::cout << "Inserisci il tuo nome: ";
-    std::getline(std::cin, nome);
-    
-    salutaUtente(nome);
-    
+    std::vector<Player> players;
+    readPlayersFromFile(players, "giocatori.txt");
+
+    std::cout << "--- Squadra ---\n\n";
+    for (const auto& player : players) {
+        player.print();
+    }
+
+    try {
+        Player best = bestScorer(players);
+        std::cout << "Il miglior marcatore della squadra è: " << best.getFullName()
+                  << " con " << best.getPointsPerGame() << " punti a partita.\n";
+    } catch (const std::runtime_error& e) {
+        std::cerr << e.what() << std::endl;
+    }
+
     return 0;
 }
