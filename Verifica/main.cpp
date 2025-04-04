@@ -5,12 +5,14 @@
 #include <sstream>
 #include <algorithm>
 #include <stdexcept>
-#include <iomanip> // Per la formattazione dell'output
-#include <map>     // Per tenere traccia dei nomi dei processi
+#include <iomanip> // For output formatting
+#include <map>     // To keep track of process names
 
-#include "process.h" // Includi l'header dei processi
+#include "process.h" // include the process header
+#include "userprocess.h"
+#include "systemprocess.h"
 
-// 0. Stampa informazioni
+// 0. print info
 void printHeader() {
     std::cout << "========================================================" << std::endl;
     std::cout << "           SIMULATORE DI GESTIONE DEI PROCESSI           " << std::endl;
@@ -22,7 +24,7 @@ void printHeader() {
     std::cout << "--------------------------------------------------------" << std::endl;
 }
 
-// Funzione per stampare il contenuto del file
+// Function to print the content of the file
 void printFileContent(const std::string& filename) {
     std::cout << "CONTENUTO DEL FILE DATI '" << filename << "':" << std::endl;
     std::ifstream file(filename);
@@ -40,12 +42,12 @@ void printFileContent(const std::string& filename) {
 
 int main() {
     printHeader();
-    const std::string filename = "dati.txt"; // Nome file modificato per test
+    const std::string filename = "dati.txt"; 
     printFileContent(filename);
 
     std::vector<UserProcess> userProcesses;
     std::vector<SystemProcess> systemProcesses;
-    std::map<std::string, bool> processNames; // Traccia dei nomi dei processi
+    std::map<std::string, bool> processNames; // Track process names
 
     std::ifstream file(filename);
     if (file.is_open()) {
@@ -87,11 +89,11 @@ int main() {
     }
     std::cout << "--------------------------------------------------------" << std::endl;
 
-    // Ordinamento
+    // Sorting
     std::sort(userProcesses.begin(), userProcesses.end(), compareUserProcesses);
     std::sort(systemProcesses.begin(), systemProcesses.end(), compareSystemProcesses);
 
-    // Calcolo tempi di attesa e completamento
+    // Calculate waiting and completion times
     int currentTime = 0;
     float totalUserWaitingTime = 0;
     float totalSystemWaitingTime = 0; // Dichiarazione qui (corretta)
@@ -153,7 +155,7 @@ int main() {
     std::cout << "Tempo medio di attesa processi utente: " << std::fixed << std::setprecision(2) << averageUserWaitingTime << " unità di tempo." << std::endl;
     std::cout << "Tempo medio di attesa processi di sistema: " << std::fixed << std::setprecision(2) << averageSystemWaitingTime << " unità di tempo." << std::endl;
 
-    // Calcolo percentuale tempo occupato
+    // Calculate percentage of time occupied
     int totalTime = currentTime;
     double userTimePercentage = (totalTime > 0) ? static_cast<double>(totalUserInstructions) / totalTime * 100 : 0;
     double systemTimePercentage = (totalTime > 0) ? static_cast<double>(totalSystemInstructions) / totalTime * 100 : 0;
@@ -164,7 +166,7 @@ int main() {
     std::cout << "Percentuale tempo CPU totale utilizzata: " << std::fixed << std::setprecision(2) << userTimePercentage + systemTimePercentage << "%" << std::endl;
     std::cout << "Tempo totale di esecuzione: " << totalTime << " unità di tempo." << std::endl;
 
-    // Identificazione processo più efficiente (tra gli utenti)
+    // Identify the most efficient user process
     const UserProcess* mostEfficientUser = nullptr;
     if (!completedUserProcesses.empty()) {
         mostEfficientUser = completedUserProcesses[0];
@@ -182,7 +184,7 @@ int main() {
         std::cout << "Nessun processo utente completato." << std::endl;
     }
 
-    // Identificazione processo con attesa massima (tra tutti)
+    // Identify the process with the maximum waiting time (among all)
     const Process* maxWaitingTimeProcess = nullptr;
     int maxWaitingTime = -1;
 

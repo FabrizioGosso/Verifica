@@ -11,8 +11,8 @@ protected:
     int priority;
     int arrivalTime;
     std::string name;
-    int waitingTime;         // Aggiungi
-    int completionTime;      // Aggiungi
+    int waitingTime;
+    int completionTime;
 
 public:
     Process(int pid, int instructions, int priority, int arrivalTime, const std::string& name);
@@ -28,37 +28,10 @@ public:
     std::string GetName() const;
     int GetPid() const;
 
-    int GetWaitingTime() const { return waitingTime; }     // Aggiungi getter
-    int GetCompletionTime() const { return completionTime; } // Aggiungi getter
-    void SetWaitingTime(int wt) { waitingTime = wt; }     // Aggiungi setter
-    void SetCompletionTime(int ct) { completionTime = ct; } // Aggiungi setter
+    int GetWaitingTime() const;
+    int GetCompletionTime() const;
+    void SetWaitingTime(int wt);
+    void SetCompletionTime(int ct);
 };
-
-class UserProcess : public Process {
-public:
-    UserProcess(int pid, int instructions, int priority, int arrivalTime, const std::string& name);
-
-    int CalculateWaitingTime() const override;
-    int CalculateCompletionTime() const override;
-    void PrintInfo() const override;
-
-    float CalculateEfficiency() const;
-    bool RequiresUI() const;
-};
-
-class SystemProcess : public Process {
-public:
-    SystemProcess(int pid, int instructions, int priority, int arrivalTime, const std::string& name);
-
-    int CalculateWaitingTime() const override;
-    int CalculateCompletionTime() const override;
-    void PrintInfo() const override;
-
-    bool IsCritical() const;
-    float CalculateCpuCost() const;
-};
-
-bool compareUserProcesses(const UserProcess& a, const UserProcess& b);
-bool compareSystemProcesses(const SystemProcess& a, const SystemProcess& b);
 
 #endif // PROCESS_H
